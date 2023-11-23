@@ -8,7 +8,7 @@ Released on ReleaseDate.
 
 ### Changed
 
-* Handle float timestamp in `repomd.xml` (but saved rounded `u64` value).
+* Handle float timestamp in `repomd.xml`.
 
 ## 0.2.0
 
