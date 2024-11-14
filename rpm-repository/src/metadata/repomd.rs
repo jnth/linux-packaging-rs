@@ -19,7 +19,7 @@ pub struct RepoMd {
     /// Revision of the repository.
     ///
     /// Often an integer-like value.
-    pub revision: String,
+    pub revision: Option<String>,
     /// Describes additional primary data files constituting this repository.
     pub data: Vec<RepoMdData>,
 }
@@ -80,7 +80,7 @@ impl TryFrom<Checksum> for ContentDigest {
 
     fn try_from(v: Checksum) -> std::result::Result<Self, Self::Error> {
         match v.name.as_str() {
-            "sha1" => ContentDigest::sha1_hex(&v.value),
+            "sha1" | "sha" => ContentDigest::sha1_hex(&v.value),
             "sha256" => ContentDigest::sha256_hex(&v.value),
             name => Err(RpmRepositoryError::UnknownDigestFormat(name.to_string())),
         }
@@ -98,10 +98,18 @@ mod test {
     use super::*;
 
     const FEDORA_35_REPOMD_XML: &str = include_str!("../testdata/fedora-35-repodata.xml");
+    const ARTIFACTORY_REPOMD_XML: &str = include_str!("../testdata/artifactory.xml");
 
     #[test]
     fn fedora_35_parse() -> Result<()> {
         RepoMd::from_xml(FEDORA_35_REPOMD_XML)?;
+
+        Ok(())
+    }
+
+    #[test]
+    fn artifactory_parse() -> Result<()> {
+        RepoMd::from_xml(ARTIFACTORY_REPOMD_XML)?;
 
         Ok(())
     }

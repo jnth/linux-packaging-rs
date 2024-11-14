@@ -118,7 +118,7 @@ impl TryFrom<Checksum> for ContentDigest {
 
     fn try_from(v: Checksum) -> std::result::Result<Self, Self::Error> {
         match v.name.as_str() {
-            "sha1" => ContentDigest::sha1_hex(&v.value),
+            "sha1" | "sha" => ContentDigest::sha1_hex(&v.value),
             "sha256" => ContentDigest::sha256_hex(&v.value),
             name => Err(RpmRepositoryError::UnknownDigestFormat(name.to_string())),
         }
